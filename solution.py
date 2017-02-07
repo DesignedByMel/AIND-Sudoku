@@ -1,4 +1,16 @@
 assignments = []
+boxes = []
+row_units = []
+col_units = []
+square_units = []
+diag_units = []
+unitlist = []
+
+# Row/Col Names
+rows = 'ABCDEFGHI'
+cols = '123456789'
+
+
 
 def assign_value(values, box, value):
     """
@@ -9,6 +21,7 @@ def assign_value(values, box, value):
     if len(value) == 1:
         assignments.append(values.copy())
     return values
+
 
 def naked_twins(values):
     """Eliminate values using the naked twins strategy.
@@ -22,9 +35,11 @@ def naked_twins(values):
     # Find all instances of naked twins
     # Eliminate the naked twins as possibilities for their peers
 
+
 def cross(A, B):
     "Cross product of elements in A and elements in B."
-    pass
+    return [a + b for a in A for b in B]
+
 
 def grid_values(grid):
     """
@@ -36,7 +51,15 @@ def grid_values(grid):
             Keys: The boxes, e.g., 'A1'
             Values: The value in each box, e.g., '8'. If the box has no value, then the value will be '123456789'.
     """
+
+    if len(grid) != 81:
+            raise ValueError("Grid must be 81 boxes")
+
+    grid = [x if x != '.' else '12346789' for x in grid]
+    values = dict(zip(boxes, grid))
+
     pass
+
 
 def display(values):
     """
@@ -46,17 +69,22 @@ def display(values):
     """
     pass
 
+
 def eliminate(values):
     pass
+
 
 def only_choice(values):
     pass
 
+
 def reduce_puzzle(values):
     pass
 
+
 def search(values):
     pass
+
 
 def solve(grid):
     """
@@ -67,6 +95,31 @@ def solve(grid):
     Returns:
         The dictionary representation of the final sudoku grid. False if no solution exists.
     """
+    # Board encoding
+    boxes = cross(rows, cols)
+    print(boxes)
+
+    # make units
+    # collumns, rows, squares, diagonals <- that should solve the second problem
+    # Rows in Board
+    row_units = [cross(r, cols) for r in rows]
+
+    # Collumns in Board
+    cols_units = [cross(rows, c) for c in cols]
+
+    # 3x3 Squares in Board
+    square_units = [cross(row_set, cols_set)
+                    for row_set in ('ABC', 'DEF', 'GHI')
+                    for cols_set in ('123', '456', '789')]
+
+    # Unit list for normal suduko
+    unitlist = row_units + col_units + square_units
+
+    # Create a dictionary of values from the grid
+    values = grid_values(grid)
+    print(values)
+    return values
+
 
 if __name__ == '__main__':
     diag_sudoku_grid = '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'
@@ -74,9 +127,14 @@ if __name__ == '__main__':
 
     try:
         from visualize import visualize_assignments
+
         visualize_assignments(assignments)
 
     except SystemExit:
         pass
     except:
         print('We could not visualize your board due to a pygame issue. Not a problem! It is not a requirement.')
+
+
+ # 2 Diagonals in Board
+    #diag_units = [x + y for x, y in zip(rows, cols) ]
