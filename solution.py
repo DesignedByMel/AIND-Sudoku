@@ -1,16 +1,30 @@
+def cross(A, B):
+    "Cross product of elements in A and elements in B."
+    return [a + b for a in A for b in B]
+
 assignments = []
-boxes = []
-row_units = []
-col_units = []
-square_units = []
-diag_units = []
-unitlist = []
 
 # Row/Col Names
 rows = 'ABCDEFGHI'
 cols = '123456789'
 
+boxes = cross(rows, cols)
 
+# make units
+# collumns, rows, squares, diagonals <- that should solve the second problem
+# Rows in Board
+row_units = [cross(r, cols) for r in rows]
+
+# Collumns in Board
+cols_units = [cross(rows, c) for c in cols]
+
+# 3x3 Squares in Board
+square_units = [cross(row_set, cols_set)
+                for row_set in ('ABC', 'DEF', 'GHI')
+                for cols_set in ('123', '456', '789')]
+
+# Unit list for normal suduko
+unitlist = row_units + col_units + square_units
 
 def assign_value(values, box, value):
     """
@@ -36,9 +50,7 @@ def naked_twins(values):
     # Eliminate the naked twins as possibilities for their peers
 
 
-def cross(A, B):
-    "Cross product of elements in A and elements in B."
-    return [a + b for a in A for b in B]
+
 
 
 def grid_values(grid):
@@ -53,12 +65,12 @@ def grid_values(grid):
     """
 
     if len(grid) != 81:
-            raise ValueError("Grid must be 81 boxes")
+        raise ValueError("Grid must be 81 boxes")
 
     grid = [x if x != '.' else '12346789' for x in grid]
     values = dict(zip(boxes, grid))
 
-    pass
+    return values
 
 
 def display(values):
@@ -96,24 +108,7 @@ def solve(grid):
         The dictionary representation of the final sudoku grid. False if no solution exists.
     """
     # Board encoding
-    boxes = cross(rows, cols)
-    print(boxes)
 
-    # make units
-    # collumns, rows, squares, diagonals <- that should solve the second problem
-    # Rows in Board
-    row_units = [cross(r, cols) for r in rows]
-
-    # Collumns in Board
-    cols_units = [cross(rows, c) for c in cols]
-
-    # 3x3 Squares in Board
-    square_units = [cross(row_set, cols_set)
-                    for row_set in ('ABC', 'DEF', 'GHI')
-                    for cols_set in ('123', '456', '789')]
-
-    # Unit list for normal suduko
-    unitlist = row_units + col_units + square_units
 
     # Create a dictionary of values from the grid
     values = grid_values(grid)
