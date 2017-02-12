@@ -54,9 +54,32 @@ def naked_twins(values):
     Returns:
         the values dictionary with the naked twins eliminated from peers.
     """
+    possible_twins = [box for box in values.keys() if len(values[box]) == 2]
+    twins = []
 
     # Find all instances of naked twins
-    # Eliminate the naked twins as possibilities for their peers
+    for box in possible_twins:
+        for peer in peers[box]:
+            if values[box] == values[peer]:
+                twins.append([box, peer])
+
+    # Eleminate
+    for twin in twins:
+        a = twin[0]
+        b = twin[1]
+
+        # Find all units the twins are in
+        for a_units in units[a]:
+            if a_units in units[b]:
+
+                # Elimate both twins from that unit
+                for box in a_units:
+                    if box != a and box != b:
+                        values[box] = values[box].replace(values[a], '')
+                        values[box] = values[box].replace(values[b], '')
+
+    return values
+
 
 def grid_values(grid):
     """
@@ -109,6 +132,7 @@ def eliminate(values):
 
     return values
 
+
 def only_choice(values):
     """
     Go through all the units, and whenever there is a unit with a value that only fits in one box, assign the value to this box.
@@ -142,6 +166,8 @@ def reduce_puzzle(values):
 
         # Use the Eliminate and Only Choice Strategies
         values = eliminate(values)
+        values = only_choice(values)
+        values = naked_twins(values)
         values = only_choice(values)
 
         # Check how many boxes have a determined value, to compare
@@ -194,7 +220,7 @@ def solve(grid):
     """
     # Create a dictionary of values from the grid
     values = grid_values(grid)
-    return search(values)
+    return display(search(values))
 
 
 if __name__ == '__main__':
