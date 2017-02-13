@@ -54,29 +54,23 @@ def naked_twins(values):
     Returns:
         the values dictionary with the naked twins eliminated from peers.
     """
-    possible_twins = [box for box in values.keys() if len(values[box]) == 2]
-    twins = []
 
-    # Find all instances of naked twins
-    for box in possible_twins:
+    # Go through every box and each of that boxes peers
+    for box in values.keys():
         for peer in peers[box]:
-            if values[box] == values[peer]:
-                twins.append([box, peer])
 
-    # Eleminate
-    for twin in twins:
-        a = twin[0]
-        b = twin[1]
+            # Find if they are twins
+            if values[box] == values[peer] and len(values[box]) == 2 and len(values[peer]) == 2:
 
-        # Find all units the twins are in
-        for a_units in units[a]:
-            if a_units in units[b]:
+                # Find all shared units
+                for box_units in units[box]:
+                    if box_units in units[peer]:
 
-                # Elimate both twins from that unit
-                for box in a_units:
-                    if box != a and box != b:
-                        values[box] = values[box].replace(values[a], '')
-                        values[box] = values[box].replace(values[b], '')
+                        # Elimate both twins from that unit
+                        for x in box_units:
+                            if x != box and x != peer:
+                                values[x] = values[x].replace(values[box][0], '')
+                                values[x] = values[x].replace(values[box][1], '')
 
     return values
 
@@ -167,8 +161,8 @@ def reduce_puzzle(values):
         # Use the Eliminate and Only Choice Strategies
         values = eliminate(values)
         values = only_choice(values)
-        values = naked_twins(values)
-        values = only_choice(values)
+        #values = naked_twins(values)
+        #values = only_choice(values)
 
         # Check how many boxes have a determined value, to compare
         solved_values_after = len([box for box in values.keys() if len(values[box]) == 1])
@@ -220,12 +214,15 @@ def solve(grid):
     """
     # Create a dictionary of values from the grid
     values = grid_values(grid)
-    return display(search(values))
+    return search(values)
 
 
 if __name__ == '__main__':
+
     diag_sudoku_grid = '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'
     display(solve(diag_sudoku_grid))
+
+
 
     try:
         from visualize import visualize_assignments
