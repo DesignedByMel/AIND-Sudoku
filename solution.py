@@ -1,3 +1,5 @@
+# Code is derived from examples and solutions given in class. My main changes are clearly marked, otherwise they are a combo of Udacity's and mine solution from the regular sudoku problem
+
 def cross(A, B):
     "Cross product of elements in A and elements in B."
     return [a + b for a in A for b in B]
@@ -25,10 +27,10 @@ square_units = [cross(row_set, cols_set)
                 for row_set in ('ABC', 'DEF', 'GHI')
                 for cols_set in ('123', '456', '789')]
 
-# Diagonal Units in Board, example: [A1, B2, C3, D4, ... I9]
+# Diagonal Units in Board, example: [A1, B2, C3, D4, ... I9] by Melanie
 diag_units = [[x + y for x, y in zip(rows, cols)],  [x + y for x, y in zip(rows, reversed(cols))]]
 
-# Unit list for normal suduko
+# Unit list for normal suduko by Melanie
 unitlist = row_units + col_units + square_units + diag_units
 
 # Creates units and peers from the UnitList, taken from example code in lesson
@@ -53,6 +55,9 @@ def naked_twins(values):
 
     Returns:
         the values dictionary with the naked twins eliminated from peers.
+
+    Author:
+        Melanie Burns
     """
 
     # Go through every box and each of that boxes peers
@@ -113,7 +118,6 @@ def display(values):
         if r in 'CF': print(line)
     return
 
-# TODO double check
 def eliminate(values):
     # Find each box that has been solved
     solved_values = [box for box in values.keys() if len(values[box]) == 1]
@@ -161,6 +165,8 @@ def reduce_puzzle(values):
         # Use the Eliminate and Only Choice Strategies
         values = eliminate(values)
         values = only_choice(values)
+
+        # Originally I thought you wanted me to solve diagonal with the twins, I'm leaving this here as it is how you would solve it the rest of the way
         #values = naked_twins(values)
         #values = only_choice(values)
 
@@ -211,6 +217,8 @@ def solve(grid):
             Example: '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'
     Returns:
         The dictionary representation of the final sudoku grid. False if no solution exists.
+    Author:
+        Melanie Burns
     """
     # Create a dictionary of values from the grid
     values = grid_values(grid)
@@ -221,8 +229,6 @@ if __name__ == '__main__':
 
     diag_sudoku_grid = '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'
     display(solve(diag_sudoku_grid))
-
-
 
     try:
         from visualize import visualize_assignments
