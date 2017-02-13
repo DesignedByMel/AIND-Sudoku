@@ -3,11 +3,11 @@
 
 # Question 1 (Naked Twins)
 Q: How do we use constraint propagation to solve the naked twins problem?  
-A: *Student should provide answer here*
+A: With the naked twins problem, we know that when two of boxes in the same unit have the same 2 values that those values are "locked" onto those squares, even if we can't solve them directly. This rule allows us to have the constraint of seeing the two squares as "solved" for their shared units. This creates smaller subset of search space by elimating those values from their shared peers. (constrant progogation).
 
 # Question 2 (Diagonal Sudoku)
 Q: How do we use constraint propagation to solve the diagonal sudoku problem?  
-A: *Student should provide answer here*
+A: We use constraint propagation in the diagonal sudoku in the same was as the regular sudoku problem. In the diagonal, we know we have another set of rules, the 2 diagonals, to join the rules of the rows, columns, and squares. By simply adding the diagonal units to the unitlist, we can confine the problem to more distinct subset. This is know as constrant propogation.
 
 ### Install
 
